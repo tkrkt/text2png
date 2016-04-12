@@ -1,5 +1,8 @@
 # text2png: Node.js text-to-png generator
 
+[![NPM](https://nodei.co/npm/text2png.png)](https://nodei.co/npm/text2png/)
+[![npm version](https://badge.fury.io/js/text2png.svg)](https://badge.fury.io/js/text2png)
+
 ```js
 text2png('Create png image\nfrom multi-line text!');
 ```
