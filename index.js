@@ -7,6 +7,8 @@ const Canvas = require('canvas');
  * @param text
  * @param [option]
  * @param [option.font='30px sans-serif']
+ * @param [option.localFontName='localFont']
+ * @param [option.localFontPath]
  * @param [option.textColor='black']
  * @param [option.bgColor]
  * @param [option.lineSpacing=0]
@@ -17,6 +19,7 @@ const Canvas = require('canvas');
 module.exports = (text, option) => {
   option = option || {};
   option.font = option.font || '30px sans-serif';
+  option.localFontName = option.localFontName || 'localFont';
   option.textColor = option.textColor || 'black';
   option.lineSpacing = option.lineSpacing || 0;
   option.padding = option.padding || 0;
@@ -25,6 +28,11 @@ module.exports = (text, option) => {
   const canvas = new Canvas(0, 0);
   const ctx = canvas.getContext('2d');
 
+  if(option.localFontPath) {
+    ctx.addFont(new Canvas.Font(option.localFontName, option.localFontPath));
+    option.font = (option.font === '30px sans-serif') ? `30px ${option.localFontName}` : option.font;
+  }
+  
   const max = {
     left: 0,
     right: 0,
