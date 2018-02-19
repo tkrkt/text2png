@@ -27,6 +27,6 @@
     "LICENSE"
   ],
   "dependencies": {
-    "canvas": "^1.6.9"
+    "canvas": "^2.0.0-alpha.9",
   }
 }
