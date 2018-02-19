@@ -16,23 +16,40 @@ const version = require('./package.json').version;
  * @param [option.color='black'] (or option.textColor) text color
  * @param [option.backgroundColor] (or option.bgColor) background color
  * @param [option.lineSpacing=0]
- * @param [option.padding=0]
- * @param [option.borderWidth=0]
- * @param [option.borderColor='black']
- * @param [option.localFontName]
- * @param [option.localFontPath]
- * @param [option.output='buffer'] 'buffer', 'stream', 'dataURL', 'canvas'
+ * @param [option.padding=0] width of the padding area (left, top, right, bottom)
+ * @param [option.paddingLeft]
+ * @param [option.paddingTop]
+ * @param [option.paddingRight]
+ * @param [option.paddingBottom]
+ * @param [option.borderWidth=0] width of border (left, top, right, bottom)
+ * @param [option.borderLeftWidth=0]
+ * @param [option.borderTopWidth=0]
+ * @param [option.borderRightWidth=0]
+ * @param [option.borderBottomWidth=0]
+ * @param [option.borderColor='black'] border color
+ * @param [option.localFontPath] path to local font (e.g. fonts/Lobster-Regular.ttf)
+ * @param [option.localFontName] name of local font (e.g. Lobster)
+ * @param [option.output='buffer'] 'buffer', 'stream', 'dataURL', 'canvas's
  * @returns {string} png image buffer
  */
 const text2png = (text, option) => {
   option = option || {};
-  option.font = option.font || '30px sans-serif';
-  option.textColor = option.textColor || option.color || 'black';
-  option.lineSpacing = option.lineSpacing || 0;
-  option.padding = option.padding || 0;
-  option.output = option.output || 'buffer';
-  option.borderWidth = option.borderWidth || 0;
-  option.borderColor = option.borderColor || 'black';
+
+  const font = option.font || '30px sans-serif';
+  const textColor = option.textColor || option.color || 'black';
+  const lineSpacing = option.lineSpacing || 0;
+  const output = option.output || 'buffer';
+
+  const paddingLeft = option.paddingLeft || option.padding || 0;
+  const paddingTop = option.paddingTop || option.padding || 0;
+  const paddingRight = option.paddingRight || option.padding || 0;
+  const paddingBottom = option.paddingBottom || option.padding || 0;
+
+  const borderLeftWidth = option.borderLeftWidth || option.borderWidth || 0;
+  const borderTopWidth = option.borderTopWidth || option.borderWidth || 0;
+  const borderRightWidth = option.borderRightWidth || option.borderWidth || 0;
+  const borderBottomWidth = option.borderBottomWidth || option.borderWidth || 0;
+  const borderColor = option.borderColor || 'black';
 
   if (option.localFontPath && option.localFontName) {
     registerFont(option.localFontPath, {family: option.localFontName});
@@ -50,7 +67,7 @@ const text2png = (text, option) => {
 
   let lastDescent;
   const lineProps = text.split('\n').map(line => {
-    ctx.font = option.font;
+    ctx.font = font;
     const metrics = ctx.measureText(line);
 
     const left = -1 * metrics.actualBoundingBoxLeft;
@@ -67,34 +84,55 @@ const text2png = (text, option) => {
     return {line, left, ascent};
   });
 
-  const borderOffset = option.padding + option.borderWidth;
+  const lineHeight = max.ascent + max.descent + lineSpacing;
 
-  const lineHeight = max.ascent + max.descent + option.lineSpacing;
-  canvas.width = max.left + max.right + borderOffset * 2;
-  canvas.height = lineHeight * lineProps.length + borderOffset * 2 - option.lineSpacing - (max.descent - lastDescent);
+  canvas.width = max.left + max.right
+    + borderLeftWidth + borderRightWidth
+    + paddingLeft + paddingRight;
 
-  if (option.borderWidth) {
-    ctx.fillStyle = option.borderColor;
+  canvas.height = lineHeight * lineProps.length
+    + borderTopWidth + borderBottomWidth
+    + paddingTop + paddingBottom
+    - lineSpacing
+    - (max.descent - lastDescent);
+
+  const hasBorder = borderLeftWidth || borderTopWidth || borderRightWidth || borderBottomWidth;
+  if (hasBorder) {
+    ctx.fillStyle = borderColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
   if (option.bgColor || option.backgroundColor) {
     ctx.fillStyle = option.bgColor || option.backgroundColor;
-    ctx.fillRect(option.borderWidth, option.borderWidth, canvas.width - option.borderWidth * 2, canvas.height - option.borderWidth * 2);
-  } else if (option.borderWidth) {
-    ctx.clearRect(option.borderWidth, option.borderWidth, canvas.width - option.borderWidth * 2, canvas.height - option.borderWidth * 2);
+    ctx.fillRect(
+      borderLeftWidth,
+      borderTopWidth,
+      canvas.width - (borderLeftWidth + borderRightWidth),
+      canvas.height - (borderTopWidth + borderBottomWidth)
+    );
+  } else if (hasBorder) {
+    ctx.clearRect(
+      borderLeftWidth,
+      borderTopWidth,
+      canvas.width - (borderLeftWidth + borderRightWidth),
+      canvas.height - (borderTopWidth + borderBottomWidth)
+    );
   }
 
-  ctx.font = option.font;
-  ctx.fillStyle = option.textColor;
+  ctx.font = font;
+  ctx.fillStyle = textColor;
   ctx.antialias = 'gray';
-  let offsetY = borderOffset;
+  let offsetY = borderTopWidth + paddingTop;
   lineProps.forEach(lineProp => {
-    ctx.fillText(lineProp.line, lineProp.left + borderOffset, max.ascent + offsetY);
+    ctx.fillText(
+      lineProp.line,
+      lineProp.left + borderLeftWidth + paddingLeft,
+      max.ascent + offsetY
+    );
     offsetY += lineHeight;
   });
 
-  switch (option.output) {
+  switch (output) {
     case 'buffer':
       return canvas.toBuffer();
     case 'stream':
@@ -104,7 +142,7 @@ const text2png = (text, option) => {
     case 'canvas':
       return canvas;
     default:
-      throw new Error(`output type:${option.output} is not supported.`)
+      throw new Error(`output type:${output} is not supported.`)
   }
 };
 
@@ -114,12 +152,20 @@ if (require.main === module) {
     .description('Create png image from text.')
     .option('-t, --text <message>', 'text')
     .option('-o, --output <path>', 'output file path')
-    .option('-f, --font <string>', 'css font option (such as "30px Lobster")')
+    .option('-f, --font <string>', 'css font option (e.g. "30px Lobster")')
     .option('-c, --color <color>', 'text color')
     .option('-b, --backgroundColor <color>', 'background color')
     .option('-s, --lineSpacing <number>', 'line spacing')
-    .option('-p, --padding <number>', 'padding')
-    .option('--borderWidth <number>', 'border width')
+    .option('-p, --padding <number>', 'width of the padding area (left, top, right, bottom)')
+    .option('--paddingLeft <number>')
+    .option('--paddingTop <number>')
+    .option('--paddingRight <number>')
+    .option('--paddingBottom <number>')
+    .option('--borderWidth <number>', 'width of border (left, top, right, bottom)')
+    .option('--borderLeftWidth <number>')
+    .option('--borderTopWidth <number>')
+    .option('--borderRightWidth <number>')
+    .option('--borderBottomWidth <number>')
     .option('--borderColor <color>', 'border color')
     .option('--localFontPath <path>', 'path to local font (e.g. fonts/Lobster-Regular.ttf)')
     .option('--localFontName <name>', 'name of local font (e.g. Lobster)')
@@ -130,9 +176,17 @@ if (require.main === module) {
       font: commander.font,
       color: commander.color,
       backgroundColor: commander.backgroundColor,
-      lineSpacing: +commander.lineSpacing || 0,
-      padding: +commander.padding || 0,
+      lineSpacing: +commander.lineSpacing,
+      padding: +commander.padding,
+      paddingLeft: +commander.paddingLeft,
+      paddingTop: +commander.paddingTop,
+      paddingRight: +commander.paddingRight,
+      paddingBottom: +commander.paddingBottom,
       borderWidth: +commander.borderWidth,
+      borderLeftWidth: +commander.borderLeftWidth,
+      borderTopWidth: +commander.borderTopWidth,
+      borderRightWidth: +commander.borderRightWidth,
+      borderBottomWidth: +commander.borderBottomWidth,
       borderColor: commander.borderColor,
       localFontPath: commander.localFontPath,
       localFontName: commander.localFontName,

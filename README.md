@@ -34,10 +34,12 @@ See [node-canvas wiki](https://github.com/Automattic/node-canvas/wiki) on instal
 |text|(required)|
 |option.font|'30px sans-serif'|
 |option.color (or option.textColor)|'black'|
-|option.backgroundColor (or option.bgColor)|null|
+|option.backgroundColor (or option.bgColor)|'transparent'|
 |option.lineSpacing|0|
 |option.padding|0|
+|option.padding(Left|Top|Right|Bottom)|0|
 |option.borderWidth|0|
+|option.border(Left|Top|Right|Bottom)Width|0|
 |option.borderColor|'black'|
 |option.output|'buffer'|
 
