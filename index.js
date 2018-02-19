@@ -1,6 +1,6 @@
 'use strict';
 
-const Canvas = require('canvas');
+const {registerFont, createCanvas} = require('canvas');
 
 /**
  * Convert text to PNG image.
@@ -11,6 +11,8 @@ const Canvas = require('canvas');
  * @param [option.bgColor]
  * @param [option.lineSpacing=0]
  * @param [option.padding=0]
+ * @param [option.localFontName]
+ * @param [option.localFontPath]
  * @param [option.output='buffer'] 'buffer', 'stream', 'dataURL', 'canvas'
  * @returns {string} png image buffer
  */
@@ -22,7 +24,11 @@ module.exports = (text, option) => {
   option.padding = option.padding || 0;
   option.output = option.output || 'buffer';
 
-  const canvas = new Canvas(0, 0);
+  if (option.localFontPath && option.localFontName) {
+    registerFont(option.localFontPath, {family: option.localFontName});
+  }
+
+  const canvas = createCanvas(0, 0);
   const ctx = canvas.getContext('2d');
 
   const max = {
