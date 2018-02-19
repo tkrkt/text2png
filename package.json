@@ -20,6 +20,12 @@
     "url": "https://github.com/tkrkt/text2png/issues"
   },
   "homepage": "https://github.com/tkrkt/text2png#readme",
+  "files": [
+    "README.md",
+    "index.js",
+    "package.json",
+    "LICENSE"
+  ],
   "dependencies": {
     "canvas": "^1.3.12"
   }
