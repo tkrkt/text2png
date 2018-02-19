@@ -33,8 +33,8 @@ See [node-canvas wiki](https://github.com/Automattic/node-canvas/wiki) on instal
 |---|---|
 |text|(required)|
 |option.font|'30px sans-serif'|
-|option.textColor|'black'|
-|option.bgColor|null|
+|option.color (or option.textColor)|'black'|
+|option.backgroundColor (or option.bgColor)|null|
 |option.lineSpacing|0|
 |option.padding|0|
 |option.output|'buffer'|

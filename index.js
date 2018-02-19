@@ -6,9 +6,9 @@ const {registerFont, createCanvas} = require('canvas');
  * Convert text to PNG image.
  * @param text
  * @param [option]
- * @param [option.font='30px sans-serif']
- * @param [option.textColor='black']
- * @param [option.bgColor]
+ * @param [option.font='30px sans-serif'] css style font
+ * @param [option.color='black'] (or option.textColor) text color
+ * @param [option.backgroundColor] (or option.bgColor) background color
  * @param [option.lineSpacing=0]
  * @param [option.padding=0]
  * @param [option.localFontName]
@@ -19,7 +19,7 @@ const {registerFont, createCanvas} = require('canvas');
 module.exports = (text, option) => {
   option = option || {};
   option.font = option.font || '30px sans-serif';
-  option.textColor = option.textColor || 'black';
+  option.textColor = option.textColor || option.color || 'black';
   option.lineSpacing = option.lineSpacing || 0;
   option.padding = option.padding || 0;
   option.output = option.output || 'buffer';
@@ -61,8 +61,8 @@ module.exports = (text, option) => {
   canvas.width = max.left + max.right + option.padding * 2;
   canvas.height = lineHeight * lineProps.length + option.padding * 2 - option.lineSpacing - (max.descent - lastDescent);
 
-  if (option.bgColor) {
-    ctx.fillStyle = option.bgColor;
+  if (option.bgColor || option.backgroundColor) {
+    ctx.fillStyle = option.bgColor || option.backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
