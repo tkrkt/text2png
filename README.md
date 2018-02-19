@@ -43,6 +43,14 @@ See [node-canvas wiki](https://github.com/Automattic/node-canvas/wiki) on instal
 
 ``'canvas'`` returns [node-canvas](https://github.com/Automattic/node-canvas) object.
 
+## Command line interface
+
+```
+$ npm install -g text2png@next
+$ text2png --help
+$ text2png -t "Hello!" -o "output.png"
+```
+
 ## Example
 
 ```js
