@@ -17,6 +17,8 @@ const version = require('./package.json').version;
  * @param [option.backgroundColor] (or option.bgColor) background color
  * @param [option.lineSpacing=0]
  * @param [option.padding=0]
+ * @param [option.borderWidth=0]
+ * @param [option.borderColor='black']
  * @param [option.localFontName]
  * @param [option.localFontPath]
  * @param [option.output='buffer'] 'buffer', 'stream', 'dataURL', 'canvas'
@@ -29,6 +31,8 @@ const text2png = (text, option) => {
   option.lineSpacing = option.lineSpacing || 0;
   option.padding = option.padding || 0;
   option.output = option.output || 'buffer';
+  option.borderWidth = option.borderWidth || 0;
+  option.borderColor = option.borderColor || 'black';
 
   if (option.localFontPath && option.localFontName) {
     registerFont(option.localFontPath, {family: option.localFontName});
@@ -63,21 +67,30 @@ const text2png = (text, option) => {
     return {line, left, ascent};
   });
 
+  const borderOffset = option.padding + option.borderWidth;
+
   const lineHeight = max.ascent + max.descent + option.lineSpacing;
-  canvas.width = max.left + max.right + option.padding * 2;
-  canvas.height = lineHeight * lineProps.length + option.padding * 2 - option.lineSpacing - (max.descent - lastDescent);
+  canvas.width = max.left + max.right + borderOffset * 2;
+  canvas.height = lineHeight * lineProps.length + borderOffset * 2 - option.lineSpacing - (max.descent - lastDescent);
+
+  if (option.borderWidth) {
+    ctx.fillStyle = option.borderColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
 
   if (option.bgColor || option.backgroundColor) {
     ctx.fillStyle = option.bgColor || option.backgroundColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(option.borderWidth, option.borderWidth, canvas.width - option.borderWidth * 2, canvas.height - option.borderWidth * 2);
+  } else if (option.borderWidth) {
+    ctx.clearRect(option.borderWidth, option.borderWidth, canvas.width - option.borderWidth * 2, canvas.height - option.borderWidth * 2);
   }
 
   ctx.font = option.font;
   ctx.fillStyle = option.textColor;
   ctx.antialias = 'gray';
-  let offsetY = option.padding;
+  let offsetY = borderOffset;
   lineProps.forEach(lineProp => {
-    ctx.fillText(lineProp.line, lineProp.left + option.padding, max.ascent + offsetY);
+    ctx.fillText(lineProp.line, lineProp.left + borderOffset, max.ascent + offsetY);
     offsetY += lineHeight;
   });
 
@@ -106,6 +119,8 @@ if (require.main === module) {
     .option('-b, --backgroundColor <color>', 'background color')
     .option('-s, --lineSpacing <number>', 'line spacing')
     .option('-p, --padding <number>', 'padding')
+    .option('--borderWidth <number>', 'border width')
+    .option('--borderColor <color>', 'border color')
     .option('--localFontPath <path>', 'path to local font (e.g. fonts/Lobster-Regular.ttf)')
     .option('--localFontName <name>', 'name of local font (e.g. Lobster)')
     .parse(process.argv);
@@ -117,6 +132,8 @@ if (require.main === module) {
       backgroundColor: commander.backgroundColor,
       lineSpacing: +commander.lineSpacing || 0,
       padding: +commander.padding || 0,
+      borderWidth: +commander.borderWidth,
+      borderColor: commander.borderColor,
       localFontPath: commander.localFontPath,
       localFontName: commander.localFontName,
       output: 'stream'

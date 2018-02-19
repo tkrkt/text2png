@@ -37,6 +37,8 @@ See [node-canvas wiki](https://github.com/Automattic/node-canvas/wiki) on instal
 |option.backgroundColor (or option.bgColor)|null|
 |option.lineSpacing|0|
 |option.padding|0|
+|option.borderWidth|0|
+|option.borderColor|'black'|
 |option.output|'buffer'|
 
 ``option.output = 'buffer' | 'stream' | 'dataURL' | 'canvas'``
