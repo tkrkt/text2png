@@ -39,9 +39,9 @@ If you want to use node-canvas 1.x, use `npm install text2png`.
 |option.backgroundColor (or option.bgColor)|'transparent'|
 |option.lineSpacing|0|
 |option.padding|0|
-|option.padding(Left|Top|Right|Bottom)|0|
+|option.padding(Left\|Top\|Right\|Bottom)|0|
 |option.borderWidth|0|
-|option.border(Left|Top|Right|Bottom)Width|0|
+|option.border(Left\|Top\|Right\|Bottom)Width|0|
 |option.borderColor|'black'|
 |option.output|'buffer'|
 
@@ -62,8 +62,8 @@ $ text2png -t "Hello!" -o "output.png"
 ```js
 text2png('Example\nText', {
   font: '80px Futura',
-  textColor: 'teal',
-  bgColor: 'linen',
+  color: 'teal',
+  backgroundColor: 'linen',
   lineSpacing: 10,
   padding: 20
 });
