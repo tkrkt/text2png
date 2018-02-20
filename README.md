@@ -43,11 +43,23 @@ If you want to use node-canvas 1.x, use `npm install text2png`.
 |option.borderWidth|0|
 |option.border(Left\|Top\|Right\|Bottom)Width|0|
 |option.borderColor|'black'|
+|option.localFontPath||
+|option.localFontName||
 |option.output|'buffer'|
 
 ``option.output = 'buffer' | 'stream' | 'dataURL' | 'canvas'``
 
 ``'canvas'`` returns [node-canvas](https://github.com/Automattic/node-canvas) object.
+
+If you want to use any custom fonts without installing, use `localFontPath` and `localFontName` property.
+
+```js
+text2png('with custom fonts', {
+  font: '50px Lobster',
+  localFontPath: 'fonts/Lobstar-Regular.ttf',
+  localFontName: 'Lobster'
+});
+```
 
 ## Command line interface
 
