@@ -3,52 +3,38 @@ const {registerFont, createCanvas} = require('canvas');
 /**
  * Convert text to PNG image.
  * @param text
- * @param [option]
- * @param [option.font='30px sans-serif'] css style font
- * @param [option.color='black'] (or option.textColor) text color
- * @param [option.backgroundColor] (or option.bgColor) background color
- * @param [option.lineSpacing=0]
- * @param [option.padding=0] width of the padding area (left, top, right, bottom)
- * @param [option.paddingLeft]
- * @param [option.paddingTop]
- * @param [option.paddingRight]
- * @param [option.paddingBottom]
- * @param [option.borderWidth=0] width of border (left, top, right, bottom)
- * @param [option.borderLeftWidth=0]
- * @param [option.borderTopWidth=0]
- * @param [option.borderRightWidth=0]
- * @param [option.borderBottomWidth=0]
- * @param [option.borderColor='black'] border color
- * @param [option.localFontPath] path to local font (e.g. fonts/Lobster-Regular.ttf)
- * @param [option.localFontName] name of local font (e.g. Lobster)
- * @param [option.output='buffer'] 'buffer', 'stream', 'dataURL', 'canvas's
+ * @param [options]
+ * @param [options.font='30px sans-serif'] css style font
+ * @param [options.color='black'] (or options.textColor) text color
+ * @param [options.backgroundColor] (or options.bgColor) background color
+ * @param [options.lineSpacing=0]
+ * @param [options.padding=0] width of the padding area (left, top, right, bottom)
+ * @param [options.paddingLeft]
+ * @param [options.paddingTop]
+ * @param [options.paddingRight]
+ * @param [options.paddingBottom]
+ * @param [options.borderWidth=0] width of border (left, top, right, bottom)
+ * @param [options.borderLeftWidth=0]
+ * @param [options.borderTopWidth=0]
+ * @param [options.borderRightWidth=0]
+ * @param [options.borderBottomWidth=0]
+ * @param [options.borderColor='black'] border color
+ * @param [options.localFontPath] path to local font (e.g. fonts/Lobster-Regular.ttf)
+ * @param [options.localFontName] name of local font (e.g. Lobster)
+ * @param [options.output='buffer'] 'buffer', 'stream', 'dataURL', 'canvas's
  * @returns {string} png image buffer
  */
-const text2png = (text, option) => {
-  option = option || {};
-
-  const font = option.font || '30px sans-serif';
-  const textColor = option.textColor || option.color || 'black';
-  const lineSpacing = option.lineSpacing || 0;
-  const output = option.output || 'buffer';
-
-  const paddingLeft = option.paddingLeft || option.padding || 0;
-  const paddingTop = option.paddingTop || option.padding || 0;
-  const paddingRight = option.paddingRight || option.padding || 0;
-  const paddingBottom = option.paddingBottom || option.padding || 0;
-
-  const borderLeftWidth = option.borderLeftWidth || option.borderWidth || 0;
-  const borderTopWidth = option.borderTopWidth || option.borderWidth || 0;
-  const borderRightWidth = option.borderRightWidth || option.borderWidth || 0;
-  const borderBottomWidth = option.borderBottomWidth || option.borderWidth || 0;
-  const borderColor = option.borderColor || 'black';
-
-  if (option.localFontPath && option.localFontName) {
-    registerFont(option.localFontPath, {family: option.localFontName});
-  }
-
+const text2png = (text, options) => {
   const canvas = createCanvas(0, 0);
   const ctx = canvas.getContext('2d');
+
+  // Options
+  options = parseOptions(options);
+
+  // Register a custom font
+  if (options.localFontPath && options.localFontName) {
+    registerFont(options.localFontPath, { family: options.localFontName });
+  }
 
   const max = {
     left: 0,
@@ -59,7 +45,7 @@ const text2png = (text, option) => {
 
   let lastDescent;
   const lineProps = text.split('\n').map(line => {
-    ctx.font = font;
+    ctx.font = options.font;
     const metrics = ctx.measureText(line);
 
     const left = -1 * metrics.actualBoundingBoxLeft;
@@ -76,55 +62,60 @@ const text2png = (text, option) => {
     return {line, left, ascent};
   });
 
-  const lineHeight = max.ascent + max.descent + lineSpacing;
+  const lineHeight = max.ascent + max.descent + options.lineSpacing;
 
   canvas.width = max.left + max.right
-    + borderLeftWidth + borderRightWidth
-    + paddingLeft + paddingRight;
+    + options.borderLeftWidth + options.borderRightWidth
+    + options.paddingLeft + options.paddingRight;
 
   canvas.height = lineHeight * lineProps.length
-    + borderTopWidth + borderBottomWidth
-    + paddingTop + paddingBottom
-    - lineSpacing
+    + options.borderTopWidth + options.borderBottomWidth
+    + options.paddingTop + options.paddingBottom
+    - options.lineSpacing
     - (max.descent - lastDescent);
 
-  const hasBorder = borderLeftWidth || borderTopWidth || borderRightWidth || borderBottomWidth;
+  const hasBorder = false
+    || options.borderLeftWidth
+    || options.borderTopWidth
+    || options.borderRightWidth
+    || options.borderBottomWidth;
+
   if (hasBorder) {
-    ctx.fillStyle = borderColor;
+    ctx.fillStyle = options.borderColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
-  if (option.bgColor || option.backgroundColor) {
-    ctx.fillStyle = option.bgColor || option.backgroundColor;
+  if (options.backgroundColor) {
+    ctx.fillStyle = options.backgroundColor;
     ctx.fillRect(
-      borderLeftWidth,
-      borderTopWidth,
-      canvas.width - (borderLeftWidth + borderRightWidth),
-      canvas.height - (borderTopWidth + borderBottomWidth)
+      options.borderLeftWidth,
+      options.borderTopWidth,
+      canvas.width - (options.borderLeftWidth + options.borderRightWidth),
+      canvas.height - (options.borderTopWidth + options.borderBottomWidth)
     );
   } else if (hasBorder) {
     ctx.clearRect(
-      borderLeftWidth,
-      borderTopWidth,
-      canvas.width - (borderLeftWidth + borderRightWidth),
-      canvas.height - (borderTopWidth + borderBottomWidth)
+      options.borderLeftWidth,
+      options.borderTopWidth,
+      canvas.width - (options.borderLeftWidth + options.borderRightWidth),
+      canvas.height - (options.borderTopWidth + options.borderBottomWidth)
     );
   }
 
-  ctx.font = font;
-  ctx.fillStyle = textColor;
+  ctx.font = options.font;
+  ctx.fillStyle = options.textColor;
   ctx.antialias = 'gray';
-  let offsetY = borderTopWidth + paddingTop;
+  let offsetY = options.borderTopWidth + options.paddingTop;
   lineProps.forEach(lineProp => {
     ctx.fillText(
       lineProp.line,
-      lineProp.left + borderLeftWidth + paddingLeft,
+      lineProp.left + options.borderLeftWidth + options.paddingLeft,
       max.ascent + offsetY
     );
     offsetY += lineHeight;
   });
 
-  switch (output) {
+  switch (options.output) {
     case 'buffer':
       return canvas.toBuffer();
     case 'stream':
@@ -134,8 +125,28 @@ const text2png = (text, option) => {
     case 'canvas':
       return canvas;
     default:
-      throw new Error(`output type:${output} is not supported.`)
+      throw new Error(`output type:${options.output} is not supported.`)
   }
 };
+
+function parseOptions(options) {
+  return {
+    backgroundColor     : options.bgColor || options.backgroundColor || null,
+    borderBottomWidth   : options.borderBottomWidth || options.borderWidth || 0,
+    borderColor         : options.borderColor || 'black',
+    borderLeftWidth     : options.borderLeftWidth || options.borderWidth || 0,
+    borderRightWidth    : options.borderRightWidth || options.borderWidth || 0,
+    borderTopWidth      : options.borderTopWidth || options.borderWidth || 0,
+    font                : options.font || '30px sans-serif',
+    lineSpacing         : options.lineSpacing || 0,
+    paddingLeft         : options.paddingLeft || options.padding || 0,
+    paddingTop          : options.paddingTop || options.padding || 0,
+    paddingRight        : options.paddingRight || options.padding || 0,
+    paddingBottom       : options.paddingBottom || options.padding || 0,
+    textAlign           : options.textAlign || 'left',
+    textColor           : options.textColor || options.color || 'black',
+    output              : options.output || 'buffer'
+  };
+}
 
 module.exports = text2png;
