@@ -19,6 +19,7 @@ const {registerFont, createCanvas} = require('canvas');
  * @param [options.borderRightWidth=0]
  * @param [options.borderBottomWidth=0]
  * @param [options.borderColor='black'] border color
+ * @param [options.textAlign='left'] text alignment (left, center, right)
  * @param [options.localFontPath] path to local font (e.g. fonts/Lobster-Regular.ttf)
  * @param [options.localFontName] name of local font (e.g. Lobster)
  * @param [options.output='buffer'] 'buffer', 'stream', 'dataURL', 'canvas's
@@ -105,13 +106,32 @@ const text2png = (text, options) => {
   ctx.font = options.font;
   ctx.fillStyle = options.textColor;
   ctx.antialias = 'gray';
+  ctx.textAlign = options.textAlign;
+
   let offsetY = options.borderTopWidth + options.paddingTop;
   lineProps.forEach(lineProp => {
-    ctx.fillText(
-      lineProp.line,
-      lineProp.left + options.borderLeftWidth + options.paddingLeft,
-      max.ascent + offsetY
-    );
+    // Calculate Y
+    let x = 0;
+    let y = max.ascent + offsetY;
+
+    // Calculate X
+    switch (options.textAlign) {
+      case "start":
+      case "left":
+        x = lineProp.left + options.borderLeftWidth + options.paddingLeft;
+        break;
+
+      case "end":
+      case "right":
+        x = canvas.width - lineProp.left - options.borderRightWidth - options.paddingRight;
+        break;
+
+      case "center":
+        x = canvas.width / 2;
+        break;
+    }
+
+    ctx.fillText(lineProp.line, x, y);
     offsetY += lineHeight;
   });
 

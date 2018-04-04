@@ -25,6 +25,7 @@ commander
   .option('--borderTopWidth <number>')
   .option('--borderRightWidth <number>')
   .option('--borderBottomWidth <number>')
+  .option('--textAlign <textAlign>', 'text alignment')
   .option('--borderColor <color>', 'border color')
   .option('--localFontPath <path>', 'path to local font (e.g. fonts/Lobster-Regular.ttf)')
   .option('--localFontName <name>', 'name of local font (e.g. Lobster)')
@@ -36,6 +37,7 @@ if (commander.text && commander.output) {
     color: commander.color,
     backgroundColor: commander.backgroundColor,
     lineSpacing: +commander.lineSpacing,
+    textAlign: commander.textAlign,
     padding: +commander.padding,
     paddingLeft: +commander.paddingLeft,
     paddingTop: +commander.paddingTop,
