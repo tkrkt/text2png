@@ -65,15 +65,18 @@ const text2png = (text, options) => {
 
   const lineHeight = max.ascent + max.descent + options.lineSpacing;
 
-  canvas.width = max.left + max.right
+  const contentWidth = max.left + max.right;
+  const contentHeight = lineHeight * lineProps.length
+    - options.lineSpacing
+    - (max.descent - lastDescent);
+
+  canvas.width = contentWidth
     + options.borderLeftWidth + options.borderRightWidth
     + options.paddingLeft + options.paddingRight;
 
-  canvas.height = lineHeight * lineProps.length
+  canvas.height = contentHeight
     + options.borderTopWidth + options.borderBottomWidth
-    + options.paddingTop + options.paddingBottom
-    - options.lineSpacing
-    - (max.descent - lastDescent);
+    + options.paddingTop + options.paddingBottom;
 
   const hasBorder = false
     || options.borderLeftWidth
@@ -127,7 +130,7 @@ const text2png = (text, options) => {
         break;
 
       case "center":
-        x = canvas.width / 2;
+        x = contentWidth / 2 + options.borderLeftWidth + options.paddingLeft;
         break;
     }
 
