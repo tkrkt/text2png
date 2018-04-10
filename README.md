@@ -35,6 +35,7 @@ If you want to use node-canvas 1.x, use `npm install text2png`.
 |---|---|
 |text|(required)|
 |option.font|'30px sans-serif'|
+|option.textAlign|'left'|
 |option.color (or option.textColor)|'black'|
 |option.backgroundColor (or option.bgColor)|'transparent'|
 |option.lineSpacing|0|
