@@ -31,30 +31,47 @@ commander
   .option('--localFontName <name>', 'name of local font (e.g. Lobster)')
   .parse(process.argv);
 
-if (commander.text && commander.output) {
-  const stream = text2png(commander.text, {
-    font: commander.font,
-    color: commander.color,
-    backgroundColor: commander.backgroundColor,
-    lineSpacing: +commander.lineSpacing,
-    textAlign: commander.textAlign,
-    padding: +commander.padding,
-    paddingLeft: +commander.paddingLeft,
-    paddingTop: +commander.paddingTop,
-    paddingRight: +commander.paddingRight,
-    paddingBottom: +commander.paddingBottom,
-    borderWidth: +commander.borderWidth,
-    borderLeftWidth: +commander.borderLeftWidth,
-    borderTopWidth: +commander.borderTopWidth,
-    borderRightWidth: +commander.borderRightWidth,
-    borderBottomWidth: +commander.borderBottomWidth,
-    borderColor: commander.borderColor,
-    localFontPath: commander.localFontPath,
-    localFontName: commander.localFontName,
-    output: 'stream'
+const exec = (text) => {
+  if ((commander.text || text) && commander.output) {
+    const stream = text2png(commander.text || text, {
+      font: commander.font,
+      color: commander.color,
+      backgroundColor: commander.backgroundColor,
+      lineSpacing: +commander.lineSpacing,
+      textAlign: commander.textAlign,
+      padding: +commander.padding,
+      paddingLeft: +commander.paddingLeft,
+      paddingTop: +commander.paddingTop,
+      paddingRight: +commander.paddingRight,
+      paddingBottom: +commander.paddingBottom,
+      borderWidth: +commander.borderWidth,
+      borderLeftWidth: +commander.borderLeftWidth,
+      borderTopWidth: +commander.borderTopWidth,
+      borderRightWidth: +commander.borderRightWidth,
+      borderBottomWidth: +commander.borderBottomWidth,
+      borderColor: commander.borderColor,
+      localFontPath: commander.localFontPath,
+      localFontName: commander.localFontName,
+      output: 'stream'
+    });
+    const outputPath = path.resolve(process.cwd(), commander.output);
+    stream.pipe(fs.createWriteStream(outputPath));
+  } else {
+    commander.outputHelp();
+  }
+};
+
+if (process.stdin.isTTY) {
+  exec();
+}
+else {
+  let input = '';
+  process.stdin.resume();
+  process.stdin.setEncoding('utf8');
+  process.stdin.on('data', function(chunk) {
+    input += chunk;
   });
-  const outputPath = path.resolve(process.cwd(), commander.output);
-  stream.pipe(fs.createWriteStream(outputPath));
-} else {
-  commander.outputHelp();
+  process.stdin.on('end', function() {
+    exec(input);
+  });
 }
