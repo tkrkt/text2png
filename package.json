@@ -26,6 +26,7 @@
   "files": [
     "README.md",
     "index.js",
+    "bin/text2png",
     "package.json",
     "LICENSE"
   ],
