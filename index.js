@@ -168,7 +168,9 @@ function parseOptions(options) {
     paddingBottom       : options.paddingBottom || options.padding || 0,
     textAlign           : options.textAlign || 'left',
     textColor           : options.textColor || options.color || 'black',
-    output              : options.output || 'buffer'
+    output              : options.output || 'buffer',
+    localFontName       : options.localFontName || null,
+    localFontPath       : options.localFontPath || null
   };
 }
 
