@@ -3,8 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 const commander = require('commander');
-const version = require('./package.json').version;
-const text2png = require('./index.js');
+const version = require('../package.json').version;
+const text2png = require('../index.js');
 
 commander
   .version(version)
