@@ -26,9 +26,6 @@ const {registerFont, createCanvas} = require('canvas');
  * @returns {string} png image buffer
  */
 const text2png = (text, options) => {
-  const canvas = createCanvas(0, 0);
-  const ctx = canvas.getContext('2d');
-
   // Options
   options = parseOptions(options);
 
@@ -36,6 +33,9 @@ const text2png = (text, options) => {
   if (options.localFontPath && options.localFontName) {
     registerFont(options.localFontPath, { family: options.localFontName });
   }
+
+  const canvas = createCanvas(0, 0);
+  const ctx = canvas.getContext('2d');
 
   const max = {
     left: 0,
