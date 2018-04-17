@@ -1,0 +1,3 @@
+["rendering default font\nif font is not installed", {
+  "font": "20px 'a wonderful font that does not exist'"
+}]

@@ -1,0 +1,7 @@
+["with\nborder", {
+  "borderWidth": 10,
+  "borderLeftWidth": 5,
+  "borderTopWidth": 20,
+  "borderRightWidth": 0,
+  "borderColor": "green"
+}]

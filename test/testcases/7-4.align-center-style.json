@@ -1,0 +1,14 @@
+["textAlign\ncenter\nwith style", {
+  "textAlign": "center",
+  "borderWidth": 10,
+  "borderLeftWidth": 50,
+  "borderTopWidth": 20,
+  "borderRightWidth": 0,
+  "borderColor": "green",
+  "padding": 10,
+  "paddingTop": 0,
+  "paddingBottom": 5,
+  "paddingRight": 20,
+  "backgroundColor": "white",
+  "lineSpacing": 20
+}]
