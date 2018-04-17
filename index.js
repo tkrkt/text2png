@@ -25,7 +25,7 @@ const {registerFont, createCanvas} = require('canvas');
  * @param [options.output='buffer'] 'buffer', 'stream', 'dataURL', 'canvas's
  * @returns {string} png image buffer
  */
-const text2png = (text, options) => {
+const text2png = (text, options = {}) => {
   // Options
   options = parseOptions(options);
 
@@ -155,17 +155,18 @@ const text2png = (text, options) => {
 function parseOptions(options) {
   return {
     backgroundColor     : options.bgColor || options.backgroundColor || null,
-    borderBottomWidth   : options.borderBottomWidth || options.borderWidth || 0,
     borderColor         : options.borderColor || 'black',
-    borderLeftWidth     : options.borderLeftWidth || options.borderWidth || 0,
-    borderRightWidth    : options.borderRightWidth || options.borderWidth || 0,
-    borderTopWidth      : options.borderTopWidth || options.borderWidth || 0,
+    borderWidth         : options.borderWidth || 0,
+    borderLeftWidth     : typeof options.borderLeftWidth === 'number' ? options.borderLeftWidth : options.borderWidth || 0,
+    borderTopWidth      : typeof options.borderTopWidth === 'number' ? options.borderTopWidth : options.borderWidth || 0,
+    borderBottomWidth   : typeof options.borderBottomWidth === 'number' ? options.borderBottomWidth : options.borderWidth || 0,
+    borderRightWidth    : typeof options.borderRightWidth === 'number' ? options.borderRightWidth : options.borderWidth || 0,
     font                : options.font || '30px sans-serif',
     lineSpacing         : options.lineSpacing || 0,
-    paddingLeft         : options.paddingLeft || options.padding || 0,
-    paddingTop          : options.paddingTop || options.padding || 0,
-    paddingRight        : options.paddingRight || options.padding || 0,
-    paddingBottom       : options.paddingBottom || options.padding || 0,
+    paddingLeft         : typeof options.paddingLeft === 'number' ? options.paddingLeft : options.padding || 0,
+    paddingTop          : typeof options.paddingTop === 'number' ? options.paddingTop : options.padding || 0,
+    paddingRight        : typeof options.paddingRight === 'number' ? options.paddingRight : options.padding || 0,
+    paddingBottom       : typeof options.paddingBottom === 'number' ? options.paddingBottom : options.padding || 0,
     textAlign           : options.textAlign || 'left',
     textColor           : options.textColor || options.color || 'black',
     output              : options.output || 'buffer',
