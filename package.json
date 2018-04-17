@@ -1,6 +1,6 @@
 {
   "name": "text2png",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Convert text to png for node.js",
   "main": "index.js",
   "scripts": {
