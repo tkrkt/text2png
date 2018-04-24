@@ -84,6 +84,4 @@ text2png('Example\nText', {
 
 ![ExampleText](./img/exampleText.png)
 
-[Test cases](http://tkrkt.github.io/text2png/test/index.html) are also useful as usage examples.
-
 Enjoy!

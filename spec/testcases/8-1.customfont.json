@@ -1,5 +1,5 @@
 ["use costom font\nwithout installing", {
   "font": "40px Lobster",
-  "localFontPath": "./test/Lobster-Regular.ttf",
+  "localFontPath": "./spec/support/Lobster-Regular.ttf",
   "localFontName": "Lobster"
 }]
