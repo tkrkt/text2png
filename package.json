@@ -7,6 +7,7 @@
     "text2png": "./bin/text2png.js"
   },
   "scripts": {
+    "lint": "eslint **/*.js",
     "test": "node test/human-eye-test.js"
   },
   "repository": {
@@ -33,5 +34,8 @@
   "dependencies": {
     "canvas": "^2.0.0-alpha.9",
     "commander": "^2.14.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1"
   }
 }
