@@ -1,5 +1,6 @@
 [![NPM](https://nodei.co/npm/text2png.png)](https://nodei.co/npm/text2png/)
 [![npm version](https://badge.fury.io/js/text2png.svg)](https://badge.fury.io/js/text2png)
+[![Build Status](https://travis-ci.org/tkrkt/text2png.svg?branch=master)](https://travis-ci.org/tkrkt/text2png)
 
 # text2png: text-to-png generator for Node.js
 
