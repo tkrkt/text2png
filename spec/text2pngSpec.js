@@ -1,3 +1,6 @@
+/* global expect */
+/* eslint no-console:0 */
+
 const fs = require('fs');
 const path = require('path');
 const glob = require('glob');
@@ -25,7 +28,7 @@ describe('text2png', () => {
             resolve();
           }
         );
-      })
-    })
+      });
+    });
   });
-})
+});
