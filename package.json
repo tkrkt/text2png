@@ -7,8 +7,8 @@
     "text2png": "./bin/text2png.js"
   },
   "scripts": {
-    "test": "jasmine",
-    "lint": "eslint **/*.js"
+    "lint": "eslint **/*.js",
+    "test": "jasmine && npm run lint"
   },
   "repository": {
     "type": "git",
@@ -36,8 +36,8 @@
     "commander": "^2.14.1"
   },
   "devDependencies": {
+    "eslint": "^4.19.1",
     "jasmine": "^3.1.0",
-    "looks-same": "^3.3.0",
-    "eslint": "^4.19.1"
+    "looks-same": "^3.3.0"
   }
 }
