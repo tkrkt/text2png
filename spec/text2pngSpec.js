@@ -5,14 +5,6 @@ const glob = require('glob');
 const text2png = require('../index.js');
 const looksSame = require('looks-same');
 
-function renderSass(file, prefix) {
-  return sass.renderSync({
-    file: [__dirname, 'support', file].join('/'),
-    importer: createImporter({prefix: prefix, debug: true}),
-    outputStyle: 'compressed',
-  }).css.toString();
-}
-
 describe('text2png', () => {
   glob.sync(path.resolve(__dirname, 'testcases', '*.json')).forEach(filePath => {
     const fileName = path.basename(filePath, '.json');
