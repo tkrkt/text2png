@@ -20,6 +20,7 @@ const {registerFont, createCanvas} = require('canvas');
  * @param [options.borderBottomWidth=0]
  * @param [options.borderColor='black'] border color
  * @param [options.textAlign='left'] text alignment (left, center, right)
+ * @param [options.letterSpacing=0] letter spacing in em
  * @param [options.localFontPath] path to local font (e.g. fonts/Lobster-Regular.ttf)
  * @param [options.localFontName] name of local font (e.g. Lobster)
  * @param [options.output='buffer'] 'buffer', 'stream', 'dataURL', 'canvas's
@@ -36,6 +37,9 @@ const text2png = (text, options = {}) => {
 
   const canvas = createCanvas(0, 0);
   const ctx = canvas.getContext('2d');
+
+  const result = options.font.match(/^(\d+)px/);
+  const fontSize = result && result[1] ? parseInt(result[1]) : 30;
 
   const max = {
     left: 0,
@@ -55,7 +59,7 @@ const text2png = (text, options = {}) => {
     const descent = metrics.actualBoundingBoxDescent;
 
     max.left = Math.max(max.left, left);
-    max.right = Math.max(max.right, right);
+    max.right = Math.max(max.right, right + fontSize * options.letterSpacing * (line.length - 1));
     max.ascent = Math.max(max.ascent, ascent);
     max.descent = Math.max(max.descent, descent);
     lastDescent = descent;
@@ -70,9 +74,9 @@ const text2png = (text, options = {}) => {
     - options.lineSpacing
     - (max.descent - lastDescent);
 
-  canvas.width = contentWidth
-    + options.borderLeftWidth + options.borderRightWidth
-    + options.paddingLeft + options.paddingRight;
+  canvas.width = contentWidth +
+    options.borderLeftWidth + options.borderRightWidth +
+    options.paddingLeft + options.paddingRight;
 
   canvas.height = contentHeight
     + options.borderTopWidth + options.borderBottomWidth
@@ -134,7 +138,7 @@ const text2png = (text, options = {}) => {
         break;
     }
 
-    ctx.fillText(lineProp.line, x, y);
+    fillTextWithLetterSpacing(ctx, lineProp.line, x, y, options.letterSpacing * fontSize);
     offsetY += lineHeight;
   });
 
@@ -154,25 +158,57 @@ const text2png = (text, options = {}) => {
 
 function parseOptions(options) {
   return {
-    backgroundColor     : options.bgColor || options.backgroundColor || null,
-    borderColor         : options.borderColor || 'black',
-    borderWidth         : options.borderWidth || 0,
-    borderLeftWidth     : typeof options.borderLeftWidth === 'number' ? options.borderLeftWidth : options.borderWidth || 0,
-    borderTopWidth      : typeof options.borderTopWidth === 'number' ? options.borderTopWidth : options.borderWidth || 0,
-    borderBottomWidth   : typeof options.borderBottomWidth === 'number' ? options.borderBottomWidth : options.borderWidth || 0,
-    borderRightWidth    : typeof options.borderRightWidth === 'number' ? options.borderRightWidth : options.borderWidth || 0,
-    font                : options.font || '30px sans-serif',
-    lineSpacing         : options.lineSpacing || 0,
-    paddingLeft         : typeof options.paddingLeft === 'number' ? options.paddingLeft : options.padding || 0,
-    paddingTop          : typeof options.paddingTop === 'number' ? options.paddingTop : options.padding || 0,
-    paddingRight        : typeof options.paddingRight === 'number' ? options.paddingRight : options.padding || 0,
-    paddingBottom       : typeof options.paddingBottom === 'number' ? options.paddingBottom : options.padding || 0,
-    textAlign           : options.textAlign || 'left',
-    textColor           : options.textColor || options.color || 'black',
-    output              : options.output || 'buffer',
-    localFontName       : options.localFontName || null,
-    localFontPath       : options.localFontPath || null
+    backgroundColor: options.bgColor || options.backgroundColor || null,
+    borderColor: options.borderColor || 'black',
+    borderWidth: options.borderWidth || 0,
+    borderLeftWidth: typeof options.borderLeftWidth === 'number' ? options.borderLeftWidth : options.borderWidth || 0,
+    borderTopWidth: typeof options.borderTopWidth === 'number' ? options.borderTopWidth : options.borderWidth || 0,
+    borderBottomWidth: typeof options.borderBottomWidth === 'number' ? options.borderBottomWidth : options.borderWidth || 0,
+    borderRightWidth: typeof options.borderRightWidth === 'number' ? options.borderRightWidth : options.borderWidth || 0,
+    font: options.font || '30px sans-serif',
+    lineSpacing: options.lineSpacing || 0,
+    letterSpacing: options.letterSpacing || 0,
+    paddingLeft: typeof options.paddingLeft === 'number' ? options.paddingLeft : options.padding || 0,
+    paddingTop: typeof options.paddingTop === 'number' ? options.paddingTop : options.padding || 0,
+    paddingRight: typeof options.paddingRight === 'number' ? options.paddingRight : options.padding || 0,
+    paddingBottom: typeof options.paddingBottom === 'number' ? options.paddingBottom : options.padding || 0,
+    textAlign: options.textAlign || 'left',
+    textColor: options.textColor || options.color || 'black',
+    output: options.output || 'buffer',
+    localFontName: options.localFontName || null,
+    localFontPath: options.localFontPath || null
   };
+}
+
+function fillTextWithLetterSpacing(context, text, x, y, letterSpacingInPx = 0) {
+  let wAll = context.measureText(text).width;
+
+  do {
+    //Remove the first character from the string
+    let char = text.substr(0, 1);
+    text = text.substr(1);
+
+    //Print the first character at position (X, Y) using fillText()
+    context.fillText(char, x, y);
+
+    let wShorter;
+    //Measure wShorter, the width of the resulting shorter string using measureText().
+    if (text == '')
+      wShorter = 0;
+    else
+      wShorter = context.measureText(text).width;
+
+    //Subtract the width of the shorter string from the width of the entire string, giving the kerned width of the character, wChar = wAll - wShorter
+    let wChar = wAll - wShorter;
+
+    //Increment X by wChar + spacing
+    x += wChar + letterSpacingInPx;
+
+    //wAll = wShorter
+    wAll = wShorter;
+
+    //Repeat from step 3
+  } while (text != '');
 }
 
 module.exports = text2png;
