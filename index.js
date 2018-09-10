@@ -64,7 +64,7 @@ const text2png = (text, options = {}) => {
     max.descent = Math.max(max.descent, descent);
     lastDescent = descent;
 
-    return {line, left, ascent};
+    return { line, left, ascent };
   });
 
   const lineHeight = max.ascent + max.descent + options.lineSpacing;
