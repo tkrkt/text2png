@@ -46,6 +46,8 @@ fs.writeFileSync('out.png', text2png('Hello!', {color: 'blue'}));
 |option.localFontName||
 |option.output|'buffer'|
 
+``option.color = '#000' | 'rgb(0, 0, 0)' | 'black' | ...``
+
 ``option.output = 'buffer' | 'stream' | 'dataURL' | 'canvas'``
 
 ``'canvas'`` returns [node-canvas](https://github.com/Automattic/node-canvas) object.
@@ -63,7 +65,7 @@ text2png('with custom fonts', {
 ## Command line interface
 
 ```
-$ npm install -g text2png@next
+$ npm install -g text2png
 $ text2png --help
 $ text2png -t "Hello!" -o "output.png"
 ```
