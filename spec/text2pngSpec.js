@@ -29,9 +29,9 @@ describe('text2png', () => {
               ignoreAntialiasing: true,
               antialiasingTolerance: 3
             },
-            (error, { equal }) => {
+            (error, match) => {
               if (error) reject(error);
-              expect(equal).toBe(true, 'generated image does not match');
+              expect(match.equal).toBe(true, match);
               resolve();
             }
           );
