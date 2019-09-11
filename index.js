@@ -4,8 +4,9 @@ const { registerFont, createCanvas } = require("canvas");
  * Convert text to PNG image.
  * @param text
  * @param [options]
- * @param [options.font='30px sans-serif'] css style font
- * @param [options.color='black'] (or options.textColor) text color
+ * @param [options.font="30px sans-serif"] css style font
+ * @param [options.textAlign="left"] text alignment (left, center, right)
+ * @param [options.color="black"] (or options.textColor) text color
  * @param [options.backgroundColor] (or options.bgColor) background color
  * @param [options.lineSpacing=0]
  * @param [options.padding=0] width of the padding area (left, top, right, bottom)
@@ -18,11 +19,10 @@ const { registerFont, createCanvas } = require("canvas");
  * @param [options.borderTopWidth=0]
  * @param [options.borderRightWidth=0]
  * @param [options.borderBottomWidth=0]
- * @param [options.borderColor='black'] border color
- * @param [options.textAlign='left'] text alignment (left, center, right)
+ * @param [options.borderColor="black"] border color
  * @param [options.localFontPath] path to local font (e.g. fonts/Lobster-Regular.ttf)
  * @param [options.localFontName] name of local font (e.g. Lobster)
- * @param [options.output='buffer'] 'buffer', 'stream', 'dataURL', 'canvas's
+ * @param [options.output="buffer"] 'buffer', 'stream', 'dataURL', 'canvas's
  * @returns {string} png image buffer
  */
 const text2png = (text, options = {}) => {
@@ -166,23 +166,27 @@ const text2png = (text, options = {}) => {
 
 function parseOptions(options) {
   return {
-    backgroundColor: or(options.bgColor, options.backgroundColor, null),
-    borderColor: or(options.borderColor, "black"),
-    borderLeftWidth: or(options.borderLeftWidth, options.borderWidth, 0),
-    borderTopWidth: or(options.borderTopWidth, options.borderWidth, 0),
-    borderBottomWidth: or(options.borderBottomWidth, options.borderWidth, 0),
-    borderRightWidth: or(options.borderRightWidth, options.borderWidth, 0),
     font: or(options.font, "30px sans-serif"),
+    textAlign: or(options.textAlign, "left"),
+    textColor: or(options.textColor, options.color, "black"),
+    backgroundColor: or(options.bgColor, options.backgroundColor, null),
     lineSpacing: or(options.lineSpacing, 0),
+
     paddingLeft: or(options.paddingLeft, options.padding, 0),
     paddingTop: or(options.paddingTop, options.padding, 0),
     paddingRight: or(options.paddingRight, options.padding, 0),
     paddingBottom: or(options.paddingBottom, options.padding, 0),
-    textAlign: or(options.textAlign, "left"),
-    textColor: or(options.textColor, options.color, "black"),
-    output: or(options.output, "buffer"),
+
+    borderLeftWidth: or(options.borderLeftWidth, options.borderWidth, 0),
+    borderTopWidth: or(options.borderTopWidth, options.borderWidth, 0),
+    borderBottomWidth: or(options.borderBottomWidth, options.borderWidth, 0),
+    borderRightWidth: or(options.borderRightWidth, options.borderWidth, 0),
+    borderColor: or(options.borderColor, "black"),
+
     localFontName: or(options.localFontName, null),
-    localFontPath: or(options.localFontPath, null)
+    localFontPath: or(options.localFontPath, null),
+
+    output: or(options.output, "buffer")
   };
 }
 

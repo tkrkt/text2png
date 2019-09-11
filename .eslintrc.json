@@ -10,7 +10,6 @@
     "sourceType": "module"
   },
   "rules": {
-    "quotes": [2, "double"],
     "camelcase": [2, { "properties": "always" }]
   }
 }
