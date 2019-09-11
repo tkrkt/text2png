@@ -166,49 +166,33 @@ const text2png = (text, options = {}) => {
 
 function parseOptions(options) {
   return {
-    backgroundColor: options.bgColor || options.backgroundColor || null,
-    borderColor: options.borderColor || "black",
-    borderWidth: options.borderWidth || 0,
-    borderLeftWidth:
-      typeof options.borderLeftWidth === "number"
-        ? options.borderLeftWidth
-        : options.borderWidth || 0,
-    borderTopWidth:
-      typeof options.borderTopWidth === "number"
-        ? options.borderTopWidth
-        : options.borderWidth || 0,
-    borderBottomWidth:
-      typeof options.borderBottomWidth === "number"
-        ? options.borderBottomWidth
-        : options.borderWidth || 0,
-    borderRightWidth:
-      typeof options.borderRightWidth === "number"
-        ? options.borderRightWidth
-        : options.borderWidth || 0,
-    font: options.font || "30px sans-serif",
-    lineSpacing: options.lineSpacing || 0,
-    paddingLeft:
-      typeof options.paddingLeft === "number"
-        ? options.paddingLeft
-        : options.padding || 0,
-    paddingTop:
-      typeof options.paddingTop === "number"
-        ? options.paddingTop
-        : options.padding || 0,
-    paddingRight:
-      typeof options.paddingRight === "number"
-        ? options.paddingRight
-        : options.padding || 0,
-    paddingBottom:
-      typeof options.paddingBottom === "number"
-        ? options.paddingBottom
-        : options.padding || 0,
-    textAlign: options.textAlign || "left",
-    textColor: options.textColor || options.color || "black",
-    output: options.output || "buffer",
-    localFontName: options.localFontName || null,
-    localFontPath: options.localFontPath || null
+    backgroundColor: or(options.bgColor, options.backgroundColor, null),
+    borderColor: or(options.borderColor, "black"),
+    borderLeftWidth: or(options.borderLeftWidth, options.borderWidth, 0),
+    borderTopWidth: or(options.borderTopWidth, options.borderWidth, 0),
+    borderBottomWidth: or(options.borderBottomWidth, options.borderWidth, 0),
+    borderRightWidth: or(options.borderRightWidth, options.borderWidth, 0),
+    font: or(options.font, "30px sans-serif"),
+    lineSpacing: or(options.lineSpacing, 0),
+    paddingLeft: or(options.paddingLeft, options.padding, 0),
+    paddingTop: or(options.paddingTop, options.padding, 0),
+    paddingRight: or(options.paddingRight, options.padding, 0),
+    paddingBottom: or(options.paddingBottom, options.padding, 0),
+    textAlign: or(options.textAlign, "left"),
+    textColor: or(options.textColor, options.color, "black"),
+    output: or(options.output, "buffer"),
+    localFontName: or(options.localFontName, null),
+    localFontPath: or(options.localFontPath, null)
   };
+}
+
+function or() {
+  for (let arg of arguments) {
+    if (typeof arg !== "undefined") {
+      return arg;
+    }
+  }
+  return arguments[arguments.length - 1];
 }
 
 module.exports = text2png;
