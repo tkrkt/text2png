@@ -25,8 +25,9 @@ describe('text2png', () => {
               path.join(__dirname, 'expected', fileName + '.png')
             ),
             {
-              tolerance: 2.5,
-              ignoreAntialiasing: true
+              tolerance: 0.2,
+              ignoreAntialiasing: true,
+              antialiasingTolerance: 3
             },
             (error, match) => {
               if (error) reject(error);
