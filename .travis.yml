@@ -7,6 +7,10 @@ node_js:
   - "8"
   - "10"
   - "12"
+addons:
+  apt:
+    packages:
+    - fonts-dejavu-core
 os:
   - linux
   - osx
