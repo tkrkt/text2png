@@ -5,16 +5,12 @@
     "browser": false,
     "mocha": true
   },
-  "extends": "eslint:recommended",
+  "extends": ["eslint:recommended", "prettier"],
   "parserOptions": {
     "sourceType": "module"
   },
   "rules": {
-    "indent": [2, 2, { "SwitchCase": 1 }],
     "quotes": [2, "double"],
-    "linebreak-style": [2, "unix"],
-    "semi": [2, "always"],
-    "camelcase": [2, { "properties": "always" }],
-    "brace-style": [2, "1tbs", { "allowSingleLine": true }]
+    "camelcase": [2, { "properties": "always" }]
   }
 }

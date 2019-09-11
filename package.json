@@ -7,8 +7,9 @@
     "text2png": "./bin/text2png.js"
   },
   "scripts": {
-    "lint": "eslint **/*.js",
-    "test": "jasmine && npm run lint"
+    "lint": "eslint **/*.js *.js",
+    "fix": "eslint **/*.js *.js --fix",
+    "test": "npm run lint && jasmine"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,7 @@
     "text",
     "png"
   ],
-  "author": "tkrkt <tkrkt2773@gmail.com> (http://github.com/tkrkt)",
+  "author": "tkrkts <tkrkt2773@gmail.com> (http://github.com/tkrkt)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/tkrkt/text2png/issues"
@@ -37,6 +38,7 @@
   },
   "devDependencies": {
     "eslint": "^6.3.0",
+    "eslint-config-prettier": "^6.3.0",
     "jasmine": "^3.4.0",
     "looks-same": "^7.2.1"
   }
