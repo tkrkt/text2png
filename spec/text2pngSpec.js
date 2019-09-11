@@ -8,6 +8,18 @@ const glob = require('glob');
 const text2png = require('../index.js');
 const looksSame = require('looks-same');
 
+const platform = {
+  darwin: 'osx',
+  linux: 'linux',
+
+  // The following are not tested
+  win32: 'windows',
+  aix: 'linux',
+  freebsd: 'linux',
+  openbsd: 'linux',
+  sunos: 'linux'
+}[process.platform];
+
 describe('text2png', () => {
   glob
     .sync(path.resolve(__dirname, 'testcases', '*.json'))
@@ -17,12 +29,16 @@ describe('text2png', () => {
 
       it('matches ' + fileName, () => {
         const config = JSON.parse(fs.readFileSync(filePath));
+        const [, targetPlatform] = fileName.split('_');
+        if (targetPlatform && targetPlatform !== platform) {
+          return;
+        }
 
         return new Promise((resolve, reject) => {
           looksSame(
             text2png.apply(text2png, config),
             fs.readFileSync(
-              path.join(__dirname, 'expected', fileName + '.png')
+              path.join(__dirname, 'expected', platform, fileName + '.png')
             ),
             {
               tolerance: 0.2,
