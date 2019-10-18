@@ -17,6 +17,9 @@ commander
   .option("-b, --backgroundColor <color>", "background color")
   .option("-s, --lineSpacing <number>", "line spacing")
 
+  .option("--strokeWidth <number>", "stroke width")
+  .option("--strokeColor <number>", "stroke color")
+
   .option(
     "-p, --padding <number>",
     "width of the padding area (left, top, right, bottom)"
