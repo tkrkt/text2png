@@ -9,6 +9,8 @@ const { registerFont, createCanvas } = require("canvas");
  * @param [options.color="black"] (or options.textColor) text color
  * @param [options.backgroundColor] (or options.bgColor) background color
  * @param [options.lineSpacing=0]
+ * @param [options.strokeWidth=0]
+ * @param [options.strokeColor='white']
  * @param [options.padding=0] width of the padding area (left, top, right, bottom)
  * @param [options.paddingLeft]
  * @param [options.paddingTop]
@@ -118,6 +120,8 @@ const text2png = (text, options = {}) => {
   ctx.fillStyle = options.textColor;
   ctx.antialias = "gray";
   ctx.textAlign = options.textAlign;
+  ctx.lineWidth = options.strokeWidth;
+  ctx.strokeStyle = options.strokeColor;
 
   let offsetY = options.borderTopWidth + options.paddingTop;
   lineProps.forEach(lineProp => {
@@ -147,6 +151,11 @@ const text2png = (text, options = {}) => {
     }
 
     ctx.fillText(lineProp.line, x, y);
+
+    if ( options.strokeWidth > 0 ) {
+      ctx.strokeText(lineProp.line, x, y);
+    }
+
     offsetY += lineHeight;
   });
 
@@ -171,6 +180,9 @@ function parseOptions(options) {
     textColor: or(options.textColor, options.color, "black"),
     backgroundColor: or(options.bgColor, options.backgroundColor, null),
     lineSpacing: or(options.lineSpacing, 0),
+
+    strokeWidth: or(options.strokeWidth, 0),
+    strokeColor: or(options.strokeColor, "white"),
 
     paddingLeft: or(options.paddingLeft, options.padding, 0),
     paddingTop: or(options.paddingTop, options.padding, 0),

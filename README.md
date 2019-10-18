@@ -37,6 +37,8 @@ fs.writeFileSync('out.png', text2png('Hello!', {color: 'blue'}));
 |option.color (or option.textColor)|'black'|
 |option.backgroundColor (or option.bgColor)|'transparent'|
 |option.lineSpacing|0|
+|option.strokeWidth|0|
+|option.strokeColor|'white'|
 |option.padding|0|
 |option.padding(Left\|Top\|Right\|Bottom)|0|
 |option.borderWidth|0|
@@ -49,6 +51,8 @@ fs.writeFileSync('out.png', text2png('Hello!', {color: 'blue'}));
 ``option.color = '#000' | 'rgb(0, 0, 0)' | 'black' | ...``
 
 ``option.output = 'buffer' | 'stream' | 'dataURL' | 'canvas'``
+
+``option.strokeWidth = 1 | 2 | ... `` A padding may have to be set to avoid cutoff of stroke
 
 ``'canvas'`` returns [node-canvas](https://github.com/Automattic/node-canvas) object.
 
