@@ -1,45 +1,48 @@
 {
-  "name": "text2png",
-  "version": "2.3.0",
-  "description": "Convert text to png for node.js",
-  "main": "index.js",
-  "bin": {
-    "text2png": "./bin/text2png.js"
-  },
-  "scripts": {
-    "lint": "eslint **/*.js *.js",
-    "fix": "eslint **/*.js *.js --fix",
-    "test": "npm run lint && jasmine"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tkrkt/text2png.git"
-  },
-  "keywords": [
-    "text",
-    "png"
-  ],
-  "author": "tkrkts <tkrkt2773@gmail.com> (http://github.com/tkrkt)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/tkrkt/text2png/issues"
-  },
-  "homepage": "https://github.com/tkrkt/text2png#readme",
-  "files": [
-    "bin",
-    "README.md",
-    "index.js",
-    "package.json",
-    "LICENSE"
-  ],
-  "dependencies": {
-    "canvas": "^2.6.0",
-    "commander": "^3.0.1"
-  },
-  "devDependencies": {
-    "eslint": "^6.3.0",
-    "eslint-config-prettier": "^6.3.0",
-    "jasmine": "^3.4.0",
-    "looks-same": "^7.2.1"
-  }
+	"name": "text2png",
+	"version": "2.3.0",
+	"description": "Convert text to png for node.js",
+	"main": "index.js",
+	"types": "./typings/index.d.ts",
+	"typings": "./typings/index.d.ts",
+	"bin": {
+		"text2png": "./bin/text2png.js"
+	},
+	"scripts": {
+		"lint": "eslint **/*.js *.js",
+		"fix": "eslint **/*.js *.js --fix",
+		"test": "npm run lint && jasmine"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/tkrkt/text2png.git"
+	},
+	"keywords": [
+		"text",
+		"png"
+	],
+	"author": "tkrkts <tkrkt2773@gmail.com> (http://github.com/tkrkt)",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/tkrkt/text2png/issues"
+	},
+	"homepage": "https://github.com/tkrkt/text2png#readme",
+	"files": [
+		"bin",
+		"README.md",
+		"index.js",
+		"package.json",
+		"LICENSE"
+	],
+	"dependencies": {
+		"canvas": "^2.6.0",
+		"commander": "^3.0.1"
+	},
+	"devDependencies": {
+		"@types/node": "^14.6.0",
+		"eslint": "^6.3.0",
+		"eslint-config-prettier": "^6.3.0",
+		"jasmine": "^3.4.0",
+		"looks-same": "^7.2.1"
+	}
 }
