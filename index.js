@@ -1,4 +1,4 @@
-const { registerFont, createCanvas } = require("canvas");
+const { registerFont, createCanvas, deregisterAllFonts } = require("canvas");
 
 /**
  * Convert text to PNG image.
@@ -30,10 +30,11 @@ const { registerFont, createCanvas } = require("canvas");
 const text2png = (text, options = {}) => {
   // Options
   options = parseOptions(options);
-
+  var isFontLoadedInMemory = false
   // Register a custom font
   if (options.localFontPath && options.localFontName) {
     registerFont(options.localFontPath, { family: options.localFontName });
+    isFontLoadedInMemory = true;
   }
 
   const canvas = createCanvas(0, 0);
@@ -158,7 +159,9 @@ const text2png = (text, options = {}) => {
 
     offsetY += lineHeight;
   });
-
+  if(isFontLoadedInMemory){
+    deregisterAllFonts()
+  }
   switch (options.output) {
     case "buffer":
       return canvas.toBuffer();
